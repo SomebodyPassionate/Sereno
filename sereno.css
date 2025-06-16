@@ -161,7 +161,7 @@ header.active .ul li a.active::after {
 #inicio {
     background:
         linear-gradient(-106deg, transparent 49.9%, var(--roxo-claro) 50%),
-        url(img/Padrão-Linhas.png) right / 100% 100% no-repeat,
+        url(img/padrao-Linhas.png) right / 100% 100% no-repeat,
         linear-gradient(to bottom, var(--roxo-principal), var(--roxo-finaldegrade));
     background-attachment: fixed;
     color: var(--roxo-texto-escuro);
