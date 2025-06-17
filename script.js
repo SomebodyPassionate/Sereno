@@ -212,6 +212,26 @@ wrapper.addEventListener("mouseleave", autoPlay);
 
 // Verifica se o DOM foi carregado
 document.addEventListener('DOMContentLoaded', function () {
+     const sobreSection = document.querySelector('.sobre-banner').closest('section') || 
+      document.querySelector('.sobre-banner').parentElement;
+
+
+    const counterConfigs = [
+        { target: 6, duration: 1000 },
+        { target: 100, duration: 1500 },
+        { target: 10000, duration: 2000 }
+    ];
+
+
+    const originalValues = Array.from(document.querySelectorAll('.banner-item h3'))
+    .map(el => el.textContent);
+
+    function resetCounters() {
+        document.querySelectorAll('.banner-item h3').forEach((counter, index) => {
+        counter.textContent = '0';
+    });
+
+
     const form = document.getElementById('signup-form');
     if (!form) return;
 
