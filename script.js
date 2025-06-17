@@ -212,25 +212,84 @@ wrapper.addEventListener("mouseleave", autoPlay);
 
 // Verifica se o DOM foi carregado
 document.addEventListener('DOMContentLoaded', function () {
-     const sobreSection = document.querySelector('.sobre-banner').closest('section') || 
-      document.querySelector('.sobre-banner').parentElement;
 
-
+    // Encontra a seção que contém o sobre-banner
+    const sobreSection = document.querySelector('.sobre-banner').closest('section') || 
+                        document.querySelector('.sobre-banner').parentElement;
+    
+    // Configuração dos contadores [valor, duração]
     const counterConfigs = [
         { target: 6, duration: 1000 },
         { target: 100, duration: 1500 },
         { target: 10000, duration: 2000 }
     ];
-
-
+    
+    // Guarda os valores originais
     const originalValues = Array.from(document.querySelectorAll('.banner-item h3'))
-    .map(el => el.textContent);
-
+        .map(el => el.textContent);
+    
+    // Função para resetar os contadores
     function resetCounters() {
         document.querySelectorAll('.banner-item h3').forEach((counter, index) => {
         counter.textContent = '0';
+        });
+    }
+    
+    // Função para animar os contadores
+    function animateCounters() {
+        const counters = document.querySelectorAll('.banner-item h3');
+        
+        counters.forEach((counter, index) => {
+        const target = parseInt(originalValues[index].replace('+', '')) || counterConfigs[index].target;
+        const duration = counterConfigs[index].duration;
+        
+        animateCounter(counter, target, duration);
+        });
+    }
+    
+    // Função de animação individual
+    function animateCounter(element, target, duration) {
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+        
+        // Limpa qualquer animação existente
+        if (element.timer) clearInterval(element.timer);
+        
+        element.timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            clearInterval(element.timer);
+            current = target;
+            element.textContent = Math.floor(current) + '+';
+        } else {
+            element.textContent = Math.floor(current);
+        }
+        }, 16);
+    }
+    
+    // Configura o Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // Seção visível - inicia animação
+            animateCounters();
+        } else {
+    
+            resetCounters();
+        }
+        });
+    }, {
+        threshold: 0.5 // Dispara quando 50% da seção estiver visível
     });
-
+    
+    
+    if (sobreSection) {
+        observer.observe(sobreSection);
+    }
+    
+    // Inicializa os contadores como 0
+    resetCounters();
 
     const form = document.getElementById('signup-form');
     if (!form) return;
